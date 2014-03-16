@@ -1,0 +1,58 @@
+\documentclass[rail]{beamer}
+\usecolortheme[RGB={153,0,0}]{structure}
+\usetheme{Rochester}
+%\useinnertheme{rounded}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\useinnertheme{rectangles}
+\usepackage[utf8]{inputenc}
+\usepackage{idrislang}
+\usepackage{listings}
+\usepackage{natbib}
+\usepackage{bibentry}
+\usepackage{color}
+\usepackage[spanish]{babel}
+\usepackage{amssymb,latexsym}
+\usepackage{xcolor}
+\usepackage{alltt}
+
+\setbeamertemplate{navigation symbols}{}
+%\bibliography{Erlang}
+
+\lstdefinestyle{idris-style}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  %%frame=L,
+  xleftmargin=\parindent,
+  language=idris,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily\color{blue},
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{black},
+  stringstyle    =\color{red},
+}
+
+\lstset{style=idris-style}%
+
+\title{\idris}
+\subtitle{A language with dependent types}
+\author{Alejandro Gómez Londoño}
+\date{17th March, 2014}
+\institute{EAFIT University}
+
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{What is \idris}
+  \begin{quotation}
+    “What if Haskell had full dependent types?”
+    \footnote[frame,1]{ Edwin Brady (2013). Idris, a general-purpose
+      dependently typed programming language: Design and
+      implementation. Journal of Functional Programming, 23, pp
+      552-593.}
+  \end{quotation}
+\end{frame}
+
+\end{document}
