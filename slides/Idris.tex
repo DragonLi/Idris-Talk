@@ -13,6 +13,7 @@
 \usepackage[spanish]{babel}
 \usepackage{amssymb,latexsym}
 \usepackage{xcolor}
+\usepackage{hyperref}
 \usepackage{alltt}
 
 \setbeamertemplate{navigation symbols}{}
@@ -32,7 +33,7 @@
   stringstyle    =\color{red},
 }
 
-\lstset{style=idris-style}%
+\lstset{style=idris-style,escapeinside=@@}%
 
 \title{\idris}
 \subtitle{A language with dependent types}
@@ -74,9 +75,9 @@
   {\color{red}{Z}} : {\color{blue}{Nat}}
   {\color{red}{50}} : {\color{blue}{Integer}}
   {\color{red}{1.23}} : {\color{blue}{Float}}
-  {\color{red}{True}} : {\color{blue}{Bool}}
+  {\color{red}{True}} : {\color{blue}{Bool}}\pause
   {\color{red}{'a'}} : {\color{blue}{Char}}
-  {\color{red}{"foo"}} : {\color{blue}{String}}
+  {\color{red}{"foo"}} : {\color{blue}{String}}\pause
 
   {\color{red}{[1,2,3]}} : {\color{blue}{List Integer}}
   {\color{red}{[1,2,3]}} : {\color{blue}{Vect 3 Integer}}
@@ -87,12 +88,12 @@
   {Data Types\footnote[frame,1]
     {Programming in Idris: a tutorial, Edwin Brady January 2012}}
   \begin{lstlisting}
-    data Nat = Z | S Nat
+    data Nat = Z | S Nat @\pause@
 
-    data Bool = True | False
+    data Bool = True | False@\pause@
 
     infixr 10 ::
-    data List a = Nill | (::) a (List a)
+    data List a = Nill | (::) a (List a)@\pause@
 
     record Person : Type where
       MkPerson : (name : String) ->
@@ -106,11 +107,11 @@
   \begin{lstlisting}
     plus : Nat -> Nat -> Nat
     plus Z y     = y
-    plus (S k) y = S (plus k y)
+    plus (S k) y = S (plus k y)@\pause@
 
     mult : Nat -> Nat -> Nat
     mult Z y     = Z
-    mult (S k) y = plus y (mult k y)
+    mult (S k) y = plus y (mult k y)@\pause@
 
     fact : Nat -> Nat
     fact Z = 1
@@ -124,13 +125,13 @@
 \begin{lstlisting}
   mirror : List a -> List a
   mirror xs = let xs' = reverse xs in
-                  xs ++ xs'
+                  xs ++ xs'@\pause@
 
   even : Nat -> Bool
   even Z = True
   even (S k) = odd k where
     odd Z = False
-    odd (S k) = even k
+    odd (S k) = even k@\pause@
 
   greet : IO ()
   greet = do putStr "What is your name? "
@@ -153,16 +154,97 @@
   \end{quotation}
 \end{frame}
 
-\begin{frame}{Dependent Types}{An Example}
-  data Vect : Nat -> Type -> Type where
-    Nil : Vect Z a
-    (::) : a -> Vect k a -> Vect (S k) a
+\begin{frame}[fragile]{Dependent Types}{Example on data types}
+  \begin{lstlisting}
+    data Vect : Nat -> Type -> Type where
+      Nil : Vect Z a
+      (::) : a -> Vect k a -> Vect (S k) a @\pause@
+
 
     data VectSum : Nat -> Nat -> Type where
       Nil : VectSum Z Z
-      (::) : (b : Nat) -> VectSum k a -> VectSum (S k) (a + b)
+      (::) : (b : Nat) ->
+             VectSum k a ->
+             VectSum (S k) (a + b)
+    \end{lstlisting}
+\end{frame}
 
+\begin{frame}[fragile]{Dependent Types}{Example on functions}
+  \begin{lstlisting}
+    (++) : Vect n a -> Vect m a -> Vect (n + m) a
+    (++) Nil ys = ys
+    (++) (x :: xs) ys = x :: xs ++ ys @\pause@
+
+
+    vecHead : Vect n a -> so (n > 0) -> a
+    vecHead (x :: xs) _ = x @\pause@
+
+
+    vecHead' : Vect (S n) a -> a
+    vecHead' (x :: xs) =  x
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Dependent Types}{Examples on Implicit Arguments}
+  \begin{lstlisting}
+  vectMap : (A : Type) -> ( B : Type)
+            -> (A -> B)-> Vect n A -> Vect n B
+  vectMap _ _ f Nil     = Nil
+  vectMap t1 t2 f (x::xs) = f x :: vectMap t1 t2 f xs @\pause@
+
+
+  vectMap' : {A : Type} -> {B : Type}
+             -> (A -> B)-> Vect n A -> Vect n B
+  vectMap' f Nil     = Nil
+  vectMap' f (x::xs) = f x :: vectMap' f xs @\pause@
+
+
+  vectMap'' : (a -> b)-> Vect n a -> Vect n b
+  vectMap'' f Nil     = Nil
+  vectMap'' f (x::xs) = f x :: vectMap'' f xs @\pause@
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Theorem Proving}
+  \begin{lstlisting}
+    data (=) : a -> b -> Type where
+      refl : x = x
+  \end{lstlisting}
+  \pause
+  Now some examples...
+\end{frame}
+\begin{frame}{Theorem Proving}{commands and tactics
+    \footnote[frame,1]
+    {\idris-wiki,\url{https://github.com/idris-lang/Idris-dev/wiki/Manual}}}
+  \begin{description}
+  \item[compute] Normalizes all terms in the goal (note: does not
+    normalize assumptions)
+  \item[exact] Provide a term of the goal type directly
+  \item[trivial] Satisfies the goal using an assumption that
+    matches its type
+  \item[intro] If your goal is an arrow, turns the left term into
+    an assumption
+  \item[intros] Exactly like intro, but it operates on all left
+    terms at once
+  \item[let] Introduces a new assumption; you may use current
+    assumptions to define the new one
+  \end{description}
 \end{frame}
 
 
+\begin{frame}{Theorem Proving}{commands and tactics
+    \footnote[frame,1]
+    {\idris-wiki,\url{https://github.com/idris-lang/Idris-dev/wiki/Manual}}}
+  \begin{description}
+  \item[rewrite] Takes an expression with an equality type (x =
+    y), and replaces all instances of x in the goal with y. Is often
+    useful in combination with 'sym'
+  \item[state] Displays the current state of the proof
+  \item[term] Displays the current proof term complete with its
+    yet-to-be-filled holes
+  \item[undo] Undoes the last tactic
+  \item[qed] Once the interactive theorem prover tells you ``No
+    more goals,'' you get to type this in celebration!
+  \end{description}
+\end{frame}
 \end{document}
