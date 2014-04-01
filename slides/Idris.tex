@@ -114,7 +114,7 @@
     mult (S k) y = plus y (mult k y)@\pause@
 
     fact : Nat -> Nat
-    fact Z = 1
+    fact Z     = 1
     fact (S k) = (S k)*(fact k)
   \end{lstlisting}
 \end{frame}
@@ -134,7 +134,7 @@
     odd (S k) = even k@\pause@
 
   greet : IO ()
-  greet = do putStr "What is your name? "
+  greet = do putStrLn "What is your name? "
     name <- getLine
     putStrLn ("Hello " ++ name)
 
@@ -172,7 +172,7 @@
 \begin{frame}[fragile]{Dependent Types}{Example on functions}
   \begin{lstlisting}
     (++) : Vect n a -> Vect m a -> Vect (n + m) a
-    (++) Nil ys = ys
+    (++) Nil ys       = ys
     (++) (x :: xs) ys = x :: xs ++ ys @\pause@
 
 
@@ -189,7 +189,7 @@
   \begin{lstlisting}
   vectMap : (A : Type) -> ( B : Type)
             -> (A -> B)-> Vect n A -> Vect n B
-  vectMap _ _ f Nil     = Nil
+  vectMap _ _ f Nil       = Nil
   vectMap t1 t2 f (x::xs) = f x :: vectMap t1 t2 f xs @\pause@
 
 

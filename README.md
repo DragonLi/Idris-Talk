@@ -9,3 +9,4 @@ practical examples using the REPL in Emacs.
 
 * [Home Page](http://www.idris-lang.org/)
 * [Tutorial](http://eb.host.cs.st-andrews.ac.uk/writings/idris-tutorial.pdf)
+* [Slides](http://agomezl.github.io/slides/Idris.pdf)
