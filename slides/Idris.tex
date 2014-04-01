@@ -1,4 +1,4 @@
-\documentclass[rail]{beamer}
+\documentclass[handout]{beamer}
 \usecolortheme[RGB={153,0,0}]{structure}
 \usetheme{Rochester}
 %\useinnertheme{rounded}
@@ -72,11 +72,11 @@
 \begin{frame}[fragile]{\idris}{Basic Types}
 \begin{alltt}
 
-  {\color{red}{Z}} : {\color{blue}{Nat}}
-  {\color{red}{50}} : {\color{blue}{Integer}}
-  {\color{red}{1.23}} : {\color{blue}{Float}}
-  {\color{red}{True}} : {\color{blue}{Bool}}\pause
-  {\color{red}{'a'}} : {\color{blue}{Char}}
+  {\color{red}{Z}}     : {\color{blue}{Nat}}
+  {\color{red}{50}}    : {\color{blue}{Integer}}
+  {\color{red}{1.23}}  : {\color{blue}{Float}}
+  {\color{red}{True}}  : {\color{blue}{Bool}}\pause
+  {\color{red}{'a'}}   : {\color{blue}{Char}}
   {\color{red}{"foo"}} : {\color{blue}{String}}\pause
 
   {\color{red}{[1,2,3]}} : {\color{blue}{List Integer}}
@@ -97,7 +97,7 @@
 
     record Person : Type where
       MkPerson : (name : String) ->
-                 (age : Int) -> Person
+                 (age  : Int)    -> Person
   \end{lstlisting}
 \end{frame}
 
@@ -106,11 +106,11 @@
     {Programming in Idris: a tutorial, Edwin Brady January 2012}}
   \begin{lstlisting}
     plus : Nat -> Nat -> Nat
-    plus Z y     = y
+    plus Z     y = y
     plus (S k) y = S (plus k y)@\pause@
 
     mult : Nat -> Nat -> Nat
-    mult Z y     = Z
+    mult Z     y = Z
     mult (S k) y = plus y (mult k y)@\pause@
 
     fact : Nat -> Nat
@@ -120,7 +120,7 @@
 \end{frame}
 
 \begin{frame}[fragile]{\idris}
-  {\texttt{do,where,let}\footnote[frame,1]
+  {\texttt{do, where, let}\footnote[frame,1]
     {Programming in Idris: a tutorial, Edwin Brady January 2012}}
 \begin{lstlisting}
   mirror : List a -> List a
@@ -128,13 +128,14 @@
                   xs ++ xs'@\pause@
 
   even : Nat -> Bool
-  even Z = True
+  even Z     = True
   even (S k) = odd k where
-    odd Z = False
+    odd Z     = False
     odd (S k) = even k@\pause@
 
   greet : IO ()
-  greet = do putStrLn "What is your name? "
+  greet = do 
+    putStrLn "What is your name? "
     name <- getLine
     putStrLn ("Hello " ++ name)
 
@@ -157,12 +158,12 @@
 \begin{frame}[fragile]{Dependent Types}{Example on data types}
   \begin{lstlisting}
     data Vect : Nat -> Type -> Type where
-      Nil : Vect Z a
+      Nil  : Vect Z a
       (::) : a -> Vect k a -> Vect (S k) a @\pause@
 
 
     data VectSum : Nat -> Nat -> Type where
-      Nil : VectSum Z Z
+      Nil  : VectSum Z Z
       (::) : (b : Nat) ->
              VectSum k a ->
              VectSum (S k) (a + b)
@@ -172,7 +173,7 @@
 \begin{frame}[fragile]{Dependent Types}{Example on functions}
   \begin{lstlisting}
     (++) : Vect n a -> Vect m a -> Vect (n + m) a
-    (++) Nil ys       = ys
+    (++) Nil       ys = ys
     (++) (x :: xs) ys = x :: xs ++ ys @\pause@
 
 
@@ -189,8 +190,9 @@
   \begin{lstlisting}
   vectMap : (A : Type) -> ( B : Type)
             -> (A -> B)-> Vect n A -> Vect n B
-  vectMap _ _ f Nil       = Nil
-  vectMap t1 t2 f (x::xs) = f x :: vectMap t1 t2 f xs @\pause@
+  vectMap _  _  f Nil     = Nil
+  vectMap t1 t2 f (x::xs) = 
+    f x :: vectMap t1 t2 f xs @\pause@
 
 
   vectMap' : {A : Type} -> {B : Type}
