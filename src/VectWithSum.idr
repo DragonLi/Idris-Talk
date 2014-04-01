@@ -1,13 +1,13 @@
 module VectWithSum
 
 data VectSum : Nat -> Nat -> Type where
-     Nil : VectSum Z Z
+     Nil  : VectSum Z Z
      (::) : (b : Nat) ->
             VectSum k a ->
             VectSum (S k) (b + a)
 
 (++) : VectSum n i -> VectSum m k -> VectSum (n + m) (i + k)
-(++) Nil v     = v
+(++) Nil     v = v
 (++) (x::xs) v = ?Vect2
 
 -- Example2.Vec2 = proof
