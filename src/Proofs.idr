@@ -1,11 +1,11 @@
 module Proofs
 
 plusReducesZ : (n:Nat) -> n = plus n Z
-plusReducesZ Z = refl
+plusReducesZ Z     = refl
 plusReducesZ (S k) = cong (plusReducesZ k)
 
 plusReducesS : (n:Nat) -> (m:Nat) -> S (plus n m) = plus n (S m)
-plusReducesS Z m = ?t2
+plusReducesS Z     m = ?t2
 plusReducesS (S k) m = ?t3
 
 plusAssoc : plus n (plus m o) = plus (plus n m) o
