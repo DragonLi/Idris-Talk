@@ -8,7 +8,7 @@ vecHead' (x :: xs) =  x
 
 vectMap : (A : Type) -> ( B : Type)
           -> (A -> B)-> Vect n A -> Vect n B
-vectMap _ _ f Nil     = Nil
+vectMap _  _  f Nil     = Nil
 vectMap t1 t2 f (x::xs) = f x :: vectMap t1 t2 f xs
 
 vectMap' : {A : Type} -> {B : Type}
